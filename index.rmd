@@ -1,0 +1,110 @@
+---
+title: "Shivam Patel - HW Week3"
+output: html_notebook
+---
+# This notebook downloads, cleans, saves,
+# and verifies three CIA datasets
+
+# Define download links
+
+
+```{r}
+
+# URL for Infant Mortality Rate data
+imr_url <- "https://github.com/DACSS-601-SHIVAM/HW-WEEK3/raw/refs/heads/main/Given-Original%20CIA%20files/Infant%20mortality%20rate.csv"
+
+# URL for Life Expectancy at Birth data
+le_url <- "https://github.com/DACSS-601-SHIVAM/HW-WEEK3/raw/refs/heads/main/Given-Original%20CIA%20files/Life%20expectancy%20at%20birth.csv"
+
+# URL for Maternal Mortality Ratio data
+mmr_url <- "https://github.com/DACSS-601-SHIVAM/HW-WEEK3/raw/refs/heads/main/Given-Original%20CIA%20files/Maternal%20mortality%20ratio.csv"
+
+# Read Infant Mortality Rate data
+download.file(imr_url, destfile = "Infant_mortality_rate.csv", mode = "wb")
+
+# Read Life Expectancy at Birth data
+download.file(le_url,  destfile = "Life_expectancy_at_birth.csv", mode = "wb")
+
+# Read Maternal Mortality Ratio data
+download.file(mmr_url, destfile = "Maternal_mortality_ratio.csv", mode = "wb")
+
+# 3) Read the downloaded files
+dirty_imr <- read.csv("Infant_mortality_rate.csv")
+dirty_le  <- read.csv("Life_expectancy_at_birth.csv")
+dirty_mmr <- read.csv("Maternal_mortality_ratio.csv")
+
+```
+
+# Clean Infant Mortality Rate data
+
+```{r}
+# Keep only country, variable, and region
+clean_imr <- dirty_imr[, c("name", "deaths.1", "ranking")]
+
+#Rename columns: country, variable, region
+names(clean_imr) <- c("country", "variable", "region")
+
+# Inspect structure of cleaned IMR data
+str(clean_imr)
+
+```
+
+# Clean Life Expectancy at Birth data
+
+```{r}
+#Clean Life Expectancy at Birth data
+#Keep only "name", "years", and "region" columns
+clean_le <- dirty_le[, c("name", "years", "region")]
+
+#Rename columns: country, variable, region
+names(clean_le) <- c("country", "variable", "region")
+
+# Verify cleaned Life Expectancy structure
+str(clean_le)
+```
+
+# Clean Maternal Mortality Ratio data
+
+```{r}
+#Clean Maternal Mortality Ratio data
+#Keep only "name", "deaths.100", and "ranking" columns
+clean_mmr <- dirty_mmr[, c("name", "deaths.100", "ranking")]
+
+#Rename columns: country, variable, region
+names(clean_mmr) <- c("country", "variable", "region")
+
+# Verify cleaned Maternal Mortality structure
+str(clean_mmr)
+```
+
+# Save cleaned datasets (CSV and RDS)
+
+```{r}
+# Save Infant Mortality Rate files
+write.csv(clean_imr, "clean_infant_mortality.csv")
+saveRDS(clean_imr, "clean_infant_mortality.rds")
+
+# Save Life Expectancy files
+write.csv(clean_le, "clean_life_expectancy.csv")
+saveRDS(clean_le, "clean_life_expectancy.rds")
+
+# Save Maternal Mortality files
+write.csv(clean_mmr, "clean_maternal_mortality.csv")
+saveRDS(clean_mmr, "clean_maternal_mortality.rds")
+```
+
+# Verify data types from saved files
+
+```{r}
+str(read.csv("clean_infant_mortality.csv"))
+str(readRDS("clean_infant_mortality.rds"))
+
+# Check Life Expectancy CSV and RDS
+str(read.csv("clean_life_expectancy.csv"))
+str(readRDS("clean_life_expectancy.rds"))
+
+# Check Maternal Mortality CSV and RDS
+str(read.csv("clean_maternal_mortality.csv"))
+str(readRDS("clean_maternal_mortality.rds"))
+```
+
